@@ -1,7 +1,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.africhange.converter.africhange_currency_task">
-   <application
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+
+    <application
         android:label="africhange_currency_task"
+        android:requestLegacyExternalStorage="true"
+        android:usesCleartextTraffic="true"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
