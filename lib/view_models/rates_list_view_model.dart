@@ -7,6 +7,8 @@ class RateListViewModel extends ChangeNotifier {
 
   RatesViewModel? rates;
 
+  bool _isLoading = true;
+
   // the value that is inputed by the user for conversion
   double _query=1.0;
 
@@ -15,9 +17,6 @@ class RateListViewModel extends ChangeNotifier {
 
   String _baseCurrency="EUR";
   String _convertingCurrency="USD";
-
-
-
 
   // set currencies to default
   void setDefaultBaseandConvertingCurrencies(){
@@ -31,6 +30,7 @@ class RateListViewModel extends ChangeNotifier {
   * Notify listeners of the update
   */
   Future<void> fetchRates() async {
+    setLoading(true);
     try{
     final results =  await Webservice().fetchRates();
     rates = RatesViewModel(rates: results.rates);
@@ -39,6 +39,7 @@ class RateListViewModel extends ChangeNotifier {
     }catch(e){
       print(e);
     }
+    setLoading(false);
     notifyListeners();
   }
 
@@ -69,6 +70,16 @@ class RateListViewModel extends ChangeNotifier {
   double  get  getConversionQuery{
     return _query;
   }
+  // return the query
+  bool  get  getLoading{
+    return _isLoading;
+  }
+  // set the base currency code
+  void  setLoading(value){
+    _isLoading = value;
+    notifyListeners();
+
+  }
 
 
   // set the base currency code
@@ -84,16 +95,12 @@ class RateListViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-
   // set how much is to be converted
   void setConversionQuery(amount){
     _query = double.parse(amount);
     notifyListeners();
 
   }
-
-
-
   /*
   * The ultimate method to do the conversions and trigger the views
   */

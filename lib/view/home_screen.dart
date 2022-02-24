@@ -33,7 +33,8 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     final vm = Provider.of<RateListViewModel>(context);
-
+    MediaQueryData queryData;
+    queryData = MediaQuery.of(context);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -65,7 +66,9 @@ class _HomeViewState extends State<HomeView> {
         ],
       ),
       body: SingleChildScrollView(
-        child: Column(
+        child: vm.getLoading==true?Container(
+            height: queryData.size.height/2,
+            child: Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(AppColors.primaryColor),))):  Column(
           children: [
             //currency elements
             Padding(
@@ -73,7 +76,8 @@ class _HomeViewState extends State<HomeView> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
+
+                children: [
                   // some space
                   const SizedBox(
                     height: 10,
@@ -96,170 +100,177 @@ class _HomeViewState extends State<HomeView> {
                           )
                         ]),
                   ),
-                  // some space
-                  const SizedBox(
-                    height: 30,
-                  ),
-                  // input field 1
-                  Container(
-                    padding: EdgeInsets.only(right: 20),
-                    decoration: BoxDecoration(
-                        color: Colors.grey.shade50,
-                        borderRadius: BorderRadius.circular(5.0)),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child: TextFormField(
-                            controller: textController,
-                            keyboardType: TextInputType.number,
-                            cursorColor: Colors.black,
-                            onChanged: (value){
-                              setState(() {
+                Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
 
-                              });
-                            },
-                            style: const TextStyle(
-                                color: Colors.black54,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700),
-                            decoration: const InputDecoration(
-                              isDense: true,
-                              hintStyle: TextStyle(
-                                  color: Colors.black54,
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w700),
-                              enabledBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.transparent, width: 2.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: Colors.transparent, width: 2.0),
+                      // some space
+                      const SizedBox(
+                        height: 30,
+                      ),
+                      // input field 1
+                      Container(
+                        padding: EdgeInsets.only(right: 20),
+                        decoration: BoxDecoration(
+                            color: Colors.grey.shade50,
+                            borderRadius: BorderRadius.circular(5.0)),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                controller: textController,
+                                keyboardType: TextInputType.number,
+                                cursorColor: Colors.black,
+                                onChanged: (value){
+                                  setState(() {
+
+                                  });
+                                },
+                                style: const TextStyle(
+                                    color: Colors.black54,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700),
+                                decoration: const InputDecoration(
+                                  isDense: true,
+                                  hintStyle: TextStyle(
+                                      color: Colors.black54,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w700),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.transparent, width: 2.0),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderSide:
+                                        BorderSide(color: Colors.transparent, width: 2.0),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
+                            Text(
+                              vm.getBaseCurrency,
+                              style: TextStyle(
+                                  color: Colors.grey.shade400,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600),
+                            )
+                          ],
                         ),
-                        Text(
-                          vm.getBaseCurrency,
-                          style: TextStyle(
-                              color: Colors.grey.shade400,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600),
-                        )
-                      ],
-                    ),
-                  ),
-                  // some space
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  // input field 2
-                  Container(
-                    height: 50,
-                    padding: EdgeInsets.only(right: 20,left:15),
-                    decoration: BoxDecoration(
-                        color: Colors.grey.shade50,
-                        borderRadius: BorderRadius.circular(5.0)),
-                    child: Row(
-                      children: [
-                        Expanded(
-                          child:   Text(
-                            vm.getConversionResult.toString(),
-                            style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 18,
-                                fontWeight: FontWeight.w600),
-                          ),
+                      ),
+                      // some space
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      // input field 2
+                      Container(
+                        height: 50,
+                        padding: EdgeInsets.only(right: 20,left:15),
+                        decoration: BoxDecoration(
+                            color: Colors.grey.shade50,
+                            borderRadius: BorderRadius.circular(5.0)),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child:   Text(
+                                vm.getConversionResult.toString(),
+                                style: const TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                            Text(
+                              vm.getConvertingCurrency,
+                              style: TextStyle(
+                                  color: Colors.grey.shade400,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600),
+                            )
+                          ],
                         ),
-                        Text(
-                          vm.getConvertingCurrency,
-                          style: TextStyle(
-                              color: Colors.grey.shade400,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w600),
-                        )
-                      ],
-                    ),
-                  ),
-                  // some space
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  // currency options row
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      // current currency
-                      const Expanded(child: CurrencyBoxWidget(type: CurrencySelectionType.base,)),
+                      ),
+                      // some space
                       const SizedBox(
-                        width: 15,
+                        height: 40,
                       ),
-                      // to
-                      SvgPicture.asset(
-                        AppIcons.convertIcon,
-                        color: Colors.grey.shade600,
-                        width: 24,
-                      ),
-                      const SizedBox(
-                        width: 15,
-                      ),
-                      // converting currency
-                      const Expanded(child: CurrencyBoxWidget(
-                         type: CurrencySelectionType.converting
-                      )),
-                    ],
-                  ),
-                  // some space
-                  const SizedBox(
-                    height: 40,
-                  ),
-                  // convert button
-                  MaterialButton(
-                    minWidth: double.infinity,
-                    elevation: 0,
-                    height: 55,
-
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(5.0)),
-                    color: textController.text.isNotEmpty? AppColors.primaryColor:Colors.grey.withOpacity(0.4),
-                    child: Text(AppTexts.convert,
-                        style:
-                        TextStyle(fontSize: 19.0, color: Colors.white)),
-                    onPressed: textController.text.isNotEmpty?() {
-                      // get the inputed text from the view
-                      // and further perform the calculations
-                      vm.setConversionQuery(textController.text);
-                      vm.convertCurrency();
-                    }:(){}
-                  ),
-                  // some space
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Center(
-                      child: Row(
-                        mainAxisAlignment:MainAxisAlignment.center ,
+                      // currency options row
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Text(AppTexts.midMarket,
-                              style:TextStyle(color: AppColors.secondaryColor,
-                                  decoration: TextDecoration.underline,
-                                  decorationColor: AppColors.secondaryColor,
-                                  fontWeight: FontWeight.w500)),
-
-                          SizedBox(width:10),
-
-                          CircleAvatar(
-                            radius: 10,
-                            backgroundColor: Colors.grey.shade300,
-                            child:SvgPicture.asset(AppIcons.infoIcon,width:24,height: 24,)
-                          )
+                          // current currency
+                          const Expanded(child: CurrencyBoxWidget(type: CurrencySelectionType.base,)),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          // to
+                          SvgPicture.asset(
+                            AppIcons.convertIcon,
+                            color: Colors.grey.shade600,
+                            width: 24,
+                          ),
+                          const SizedBox(
+                            width: 15,
+                          ),
+                          // converting currency
+                          const Expanded(child: CurrencyBoxWidget(
+                             type: CurrencySelectionType.converting
+                          )),
                         ],
-                      )),
+                      ),
+                      // some space
+                      const SizedBox(
+                        height: 40,
+                      ),
+                      // convert button
+                      MaterialButton(
+                        minWidth: double.infinity,
+                        elevation: 0,
+                        height: 55,
+
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5.0)),
+                        color: textController.text.isNotEmpty? AppColors.primaryColor:Colors.grey.withOpacity(0.4),
+                        child: Text(AppTexts.convert,
+                            style:
+                            TextStyle(fontSize: 19.0, color: Colors.white)),
+                        onPressed: textController.text.isNotEmpty?() {
+                          // get the inputed text from the view
+                          // and further perform the calculations
+                          vm.setConversionQuery(textController.text);
+                          vm.convertCurrency();
+                        }:(){}
+                      ),
+                      // some space
+                      const SizedBox(
+                        height: 20,
+                      ),
+                      Center(
+                          child: Row(
+                            mainAxisAlignment:MainAxisAlignment.center ,
+                            children: [
+                              Text(AppTexts.midMarket,
+                                  style:TextStyle(color: AppColors.secondaryColor,
+                                      decoration: TextDecoration.underline,
+                                      decorationColor: AppColors.secondaryColor,
+                                      fontWeight: FontWeight.w500)),
+
+                              SizedBox(width:10),
+
+                              CircleAvatar(
+                                radius: 10,
+                                backgroundColor: Colors.grey.shade300,
+                                child:SvgPicture.asset(AppIcons.infoIcon,width:24,height: 24,)
+                              )
+                            ],
+                          )),
 
 
 
+                    ],
+
+                  ),
                 ],
-
               ),
             ),
             // graph elements
