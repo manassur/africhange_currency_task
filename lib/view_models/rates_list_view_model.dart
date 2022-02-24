@@ -8,6 +8,8 @@ class RateListViewModel extends ChangeNotifier {
   RatesViewModel? rates;
 
   bool _isLoading = true;
+  bool _hasError = false;
+  String errorText='';
 
   // the value that is inputed by the user for conversion
   double _query=1.0;
@@ -30,16 +32,21 @@ class RateListViewModel extends ChangeNotifier {
   * Notify listeners of the update
   */
   Future<void> fetchRates() async {
+    setHasError(false);
     setLoading(true);
     try{
     final results =  await Webservice().fetchRates();
     rates = RatesViewModel(rates: results.rates);
     print(rates!.usd);
+    setLoading(false);
     convertCurrency();
     }catch(e){
+      setHasError(true);
+      setError(e.toString());
       print(e);
+      setLoading(false);
     }
-    setLoading(false);
+
     notifyListeners();
   }
 
@@ -80,6 +87,32 @@ class RateListViewModel extends ChangeNotifier {
     notifyListeners();
 
   }
+
+  // return if there is an error
+  bool  get  getHasError{
+    return _hasError;
+  }
+  // set a error boolean
+  void  setHasError(value){
+    _hasError = value;
+    notifyListeners();
+
+  }
+
+  // return the error
+  String  get  getErrorText{
+    return errorText;
+  }
+  // set the base currency code
+  void  setError(value){
+    errorText = value;
+    notifyListeners();
+
+  }
+
+
+
+
 
 
   // set the base currency code

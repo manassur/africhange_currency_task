@@ -65,7 +65,7 @@ class _HomeViewState extends State<HomeView> {
           )
         ],
       ),
-      body: SingleChildScrollView(
+      body:vm.getHasError?Text(vm.getErrorText): SingleChildScrollView(
         child: vm.getLoading==true?Container(
             height: queryData.size.height/2,
             child: Center(child: CircularProgressIndicator(valueColor: AlwaysStoppedAnimation(AppColors.primaryColor),))):  Column(
