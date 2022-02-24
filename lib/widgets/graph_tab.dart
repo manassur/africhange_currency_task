@@ -1,5 +1,7 @@
 import 'package:africhange_currency_task/data/app_colors.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'circle_tab_indicator.dart';
 
@@ -22,7 +24,7 @@ class _GraphTabWidgetState extends State<GraphTabWidget> with SingleTickerProvid
   @override
   Widget build(BuildContext context) {
     return  Container(
-      height: 200,
+      height: 350,
       padding: EdgeInsets.symmetric(vertical: 20),
       decoration: BoxDecoration(
         color: AppColors.secondaryColor,
@@ -54,8 +56,18 @@ class _GraphTabWidgetState extends State<GraphTabWidget> with SingleTickerProvid
           Expanded(
             child: TabBarView(
               children: [
-                Container(child: Center(child: Text('people'))),
-                Text('Person')
+                Container(
+                  height: 400,
+                  padding: EdgeInsets.all(30),
+                  width: double.infinity,
+                  child: LineChart(
+                    mainChart(Colors.white),
+                    swapAnimationDuration:
+                    Duration(milliseconds: 150), // Optional
+                    swapAnimationCurve: Curves.linear, // Optional
+                  ),
+                ),
+                Text('90  days')
               ],
               controller: _tabController,
             ),
@@ -64,4 +76,119 @@ class _GraphTabWidgetState extends State<GraphTabWidget> with SingleTickerProvid
       ),
     );
   }
+
+  LineChartData mainChart(Color color) {
+
+    return LineChartData(
+
+      gridData: FlGridData(
+
+
+        horizontalInterval: 1,
+        show: true,
+
+        drawVerticalLine: false,
+        drawHorizontalLine: false
+      ),
+      titlesData: FlTitlesData(
+        show:   true,
+        leftTitles:SideTitles(
+          getTextStyles: (context,value){
+            return TextStyle(
+                fontSize: 13.sp,
+                color: Colors.grey
+            );
+          } ,
+
+
+        ),
+
+        topTitles:SideTitles (
+          showTitles: false,
+
+
+        ),
+        rightTitles:SideTitles (
+          showTitles: false,
+
+        ),
+
+        bottomTitles:SideTitles(
+          showTitles: true,
+          getTextStyles: (context,value){
+            return TextStyle(
+                fontSize: 14.sp,
+                color: Colors.white
+            );
+          } ,
+          reservedSize: 10,
+
+          getTitles: (value) {
+            switch (value.toInt()) {
+              case 0:
+                return '01 Jun';
+              case 2:
+                return '07 June';
+              case 4:
+                return '15 Jun';
+              case 6:
+                return '23 Jun';
+              case 8:
+                return '30 Jun';
+              default:
+                return '';
+            }},
+        ),
+
+      ),
+      borderData: FlBorderData(
+          show: false,
+      ),
+
+      minX: 0,
+      maxX: 10,
+      minY: 0,
+      maxY:9,
+
+      lineBarsData: [
+        LineChartBarData(
+
+          spots: [
+            FlSpot(0, 4),
+            FlSpot(1, 8),
+            FlSpot(2, 9),
+            FlSpot(3, 7),
+            FlSpot(4, 4),
+            FlSpot(5, 5),
+            FlSpot(6, 5),
+            FlSpot(7, 6),
+            FlSpot(8, 7),
+            FlSpot(9, 8),
+            FlSpot(10, 9),
+
+          ],
+          isCurved: true,
+
+          colors: [
+            color,
+
+          ],
+          barWidth: 0,
+          isStrokeCapRound: false,
+          dotData: FlDotData(
+            show: false,
+          ),
+          belowBarData: BarAreaData(
+            show: true,
+            colors:[
+              Colors.white.withOpacity(0.3),
+
+            ],
+
+          ),
+        ),
+      ],
+    );
+  }
+
 }

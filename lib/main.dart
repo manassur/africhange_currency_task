@@ -1,6 +1,7 @@
 import 'package:africhange_currency_task/view_models/rates_list_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'view/home_screen.dart';
 
@@ -26,7 +27,11 @@ class MyApp extends StatelessWidget {
 
         primarySwatch: Colors.blue,
       ),
-      home:  HomeView(),
+      home:   ResponsiveSizer(
+          builder: (context, orientation, deviceType) {
+
+            return HomeView();
+          }),
     );
   }
 }
